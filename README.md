@@ -28,3 +28,11 @@ Deploy it:
 kubectl apply -f k8s-secret.yaml
 kubectl apply -f k8s-deployment.yaml
 ```
+
+# How to create secrets in Secret Receiver
+
+Use [secretpublisher][1] command line tool.
+
+
+
+[1]: [https://github.com/betorvs/secretpublisher]
