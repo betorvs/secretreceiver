@@ -1,5 +1,5 @@
-secretreceiver
-=============
+Secret Receiver
+===============
 
 This microservice was created to act as a CRUD for secret in Kubernetes. To be used to automated secret renew in Kubernetes.
 
@@ -12,7 +12,7 @@ go build
 
 # Environment variables
 
-*ENCODING_REQUEST* is used to accepted only encoded requests. To send requests encoded, use [secretpublisher](githut.com/betorvs/secretpublisher) command line.
+*ENCODING_REQUEST* is used to accepted only encoded requests.
 
 # Deploy it in Kubernetes
 
@@ -31,7 +31,7 @@ kubectl apply -f k8s-deployment.yaml
 
 # How to create secrets in Secret Receiver
 
-Use [secretpublisher][1] command line tool.
+Use [secretpublisher][1] command line tool to send encoded requests to Secret Receiver.
 
 
 
