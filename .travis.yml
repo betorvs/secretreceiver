@@ -6,7 +6,7 @@ services:
 
 install:
 - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
-  | sh -s -- -b $(go env GOPATH)/bin v1.22.2
+  | sh -s -- -b $(go env GOPATH)/bin v1.23.8
 script:
 - "$(go env GOPATH)/bin/golangci-lint run"
 # - TESTRUN=true go test -v -race ./...
