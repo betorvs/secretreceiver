@@ -11,11 +11,21 @@ script:
 - "$(go env GOPATH)/bin/golangci-lint run --timeout 5m"
 # - TESTRUN=true go test -v -race ./...
 - docker build -f Dockerfile -t betorvs/secretreceiver:$COMMIT .
+- echo "REPO $TRAVIS_REPO_SLUG TAG ${TRAVIS_TAG}"
 env:
   global:
   - COMMIT=${TRAVIS_COMMIT::8}
-after_success:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker push betorvs/secretreceiver:$COMMIT
-- docker tag betorvs/secretreceiver:$COMMIT betorvs/secretreceiver:latest
-- docker push betorvs/secretreceiver:latest
+# after_success:
+# - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+# - docker push betorvs/secretreceiver:$COMMIT
+# - docker tag betorvs/secretreceiver:$COMMIT betorvs/secretreceiver:latest
+# - docker push betorvs/secretreceiver:latest
+deploy:
+  - provider: script
+    script: bash travis_deploy.sh "betorvs/secretreceiver" $COMMIT false
+    on:
+      branch: master
+  - provider: script
+    script: bash travis_deploy.sh "betorvs/secretreceiver" ${TRAVIS_TAG} true
+    on:
+      tags: true
