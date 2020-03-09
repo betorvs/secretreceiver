@@ -13,14 +13,14 @@ type Secret struct {
 // Repository interface
 type Repository interface {
 	appcontext.Component
-	// CheckSecret return a annotation to validate the secret already created
-	CheckSecret(name string, namespace string) (string, string, error)
-	// CreateSecret creates a new secret
-	CreateSecret(name string, checksum string, namespace string, data map[string]string) (string, error)
-	// UpdateSecret updates an already created secret
-	UpdateSecret(name string, checksum string, namespace string, data map[string]string) (string, error)
-	// DeleteSecret deletes a secret
-	DeleteSecret(name string, namespace string) (string, error)
+	// CheckSecretK8S return a annotation to validate the secret already created
+	CheckSecretK8S(name string, namespace string) (string, string, error)
+	// CreateSecretK8S creates a new secret
+	CreateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error)
+	// UpdateSecretK8S updates an already created secret
+	UpdateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error)
+	// DeleteSecretK8S deletes a secret
+	DeleteSecretK8S(name string, namespace string) (string, error)
 }
 
 // GetRepository func

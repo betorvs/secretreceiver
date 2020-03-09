@@ -19,8 +19,8 @@ type Repository struct {
 	Clientset *kubernetes.Clientset
 }
 
-// CheckSecret func
-func (repo Repository) CheckSecret(name string, namespace string) (string, string, error) {
+// CheckSecretK8S func
+func (repo Repository) CheckSecretK8S(name string, namespace string) (string, string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secretList, err := secretClient.List(metav1.ListOptions{})
 	if err != nil {
@@ -40,8 +40,8 @@ func (repo Repository) CheckSecret(name string, namespace string) (string, strin
 	return result, checksum, nil
 }
 
-// CreateSecret func
-func (repo Repository) CreateSecret(name string, checksum string, namespace string, data map[string]string) (string, error) {
+// CreateSecretK8S func
+func (repo Repository) CreateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -63,8 +63,8 @@ func (repo Repository) CreateSecret(name string, checksum string, namespace stri
 	return result.GetObjectMeta().GetName(), nil
 }
 
-// UpdateSecret func
-func (repo Repository) UpdateSecret(name string, checksum string, namespace string, data map[string]string) (string, error) {
+// UpdateSecretK8S func
+func (repo Repository) UpdateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -86,8 +86,8 @@ func (repo Repository) UpdateSecret(name string, checksum string, namespace stri
 	return result.GetObjectMeta().GetName(), nil
 }
 
-// DeleteSecret func
-func (repo Repository) DeleteSecret(name string, namespace string) (string, error) {
+// DeleteSecretK8S func
+func (repo Repository) DeleteSecretK8S(name string, namespace string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	deletePolicy := metav1.DeletePropagationForeground
 	options := &metav1.DeleteOptions{

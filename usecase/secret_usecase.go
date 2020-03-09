@@ -13,7 +13,7 @@ import (
 func CheckSecret(name string, namespace string) (string, error) {
 	var checksum string
 	kube := domain.GetRepository()
-	_, checksum, err := kube.CheckSecret(name, namespace)
+	_, checksum, err := kube.CheckSecretK8S(name, namespace)
 	if err != nil {
 		return "", err
 	}
@@ -23,19 +23,19 @@ func CheckSecret(name string, namespace string) (string, error) {
 // CreateSecret func
 func CreateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.CreateSecret(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
+	return kube.CreateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
 }
 
 // UpdateSecret func
 func UpdateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.UpdateSecret(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
+	return kube.UpdateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
 }
 
 // DeleteSecret func
 func DeleteSecret(name string, namespace string) (string, error) {
 	kube := domain.GetRepository()
-	return kube.DeleteSecret(name, namespace)
+	return kube.DeleteSecretK8S(name, namespace)
 }
 
 // ValidateAuthorization func to validate authorization

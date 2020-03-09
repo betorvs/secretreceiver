@@ -10,3 +10,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - CRUD to manage secrets inside kubernetes using rest api.
 - ENCODING_REQUEST variable to accepted only encoded requests.
+- Add tests in appcontext, controller and usecase
+- Add deploy script to control tag and branch versions

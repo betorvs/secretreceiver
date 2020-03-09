@@ -9,7 +9,7 @@ install:
   | sh -s -- -b $(go env GOPATH)/bin v1.23.8
 script:
 - "$(go env GOPATH)/bin/golangci-lint run --timeout 5m"
-# - TESTRUN=true go test -v -race ./...
+- ENCODING_REQUEST="aaaaaaaa" TESTRUN=true go test -v -race ./...
 - docker build -f Dockerfile -t betorvs/secretreceiver:$COMMIT .
 - echo "REPO $TRAVIS_REPO_SLUG TAG ${TRAVIS_TAG}"
 env:
