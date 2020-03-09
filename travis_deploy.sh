@@ -1,5 +1,7 @@
 #!/bin/bash
 # basic script to deploy docker in dockerhub with commit and release tags
+set -e
+
 
 IMAGE="${1}"
 TAG="${2}"
