@@ -61,7 +61,7 @@ func UpdateSecret(c echo.Context) (err error) {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	return c.JSON(http.StatusOK, result)
+	return c.JSON(http.StatusAccepted, result)
 }
 
 // DeleteSecret func

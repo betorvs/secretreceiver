@@ -18,7 +18,7 @@ go build
 
 Create Secret file:
 ```sh
-kubectl create secret generic sensubot --from-literal=encodedrequest=LONGHASH --dry-run -o yaml > k8s-secret.yaml
+kubectl create secret generic secretreceiver --from-literal=encodedrequest=LONGHASH --dry-run -o yaml > k8s-secret.yaml
 ```
 
 Configure Ingress in k8s-deployment.yaml (line 62) change secretreceiver.example.local to use your own domain.

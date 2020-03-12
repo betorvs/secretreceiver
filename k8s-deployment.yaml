@@ -28,7 +28,6 @@ spec:
               secretKeyRef:
                 name: secretreceiver 
                 key: encodedrequest
-            value: "teste"
           ports:
             - name: http
               containerPort: 9090
