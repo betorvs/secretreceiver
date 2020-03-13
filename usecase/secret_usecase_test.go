@@ -63,7 +63,7 @@ func TestCheckSecret(t *testing.T) {
 	assert.NoError(t, err)
 	expected := 1
 	if RepositoryCheckCalls != expected {
-		t.Fatalf("Invalid 2.1 TestCheckSecret %d", expected)
+		t.Fatalf("Invalid 2.1 TestCheckSecret %d", RepositoryCheckCalls)
 	}
 
 }
@@ -79,7 +79,7 @@ func TestCreateSecret(t *testing.T) {
 	assert.NoError(t, err)
 	expected := 1
 	if RepositoryCreateCalls != expected {
-		t.Fatalf("Invalid 3.1 TestCreateSecret %d", expected)
+		t.Fatalf("Invalid 3.1 TestCreateSecret %d", RepositoryCreateCalls)
 	}
 
 }
@@ -95,7 +95,7 @@ func TestUpdateSecret(t *testing.T) {
 	assert.NoError(t, err)
 	expected := 1
 	if RepositoryUpdateCalls != expected {
-		t.Fatalf("Invalid 4.1 TestUpdateSecret %d", expected)
+		t.Fatalf("Invalid 4.1 TestUpdateSecret %d", RepositoryUpdateCalls)
 	}
 
 }
@@ -107,7 +107,7 @@ func TestDeleteSecret(t *testing.T) {
 	assert.NoError(t, err)
 	expected := 1
 	if RepositoryDeleteCalls != expected {
-		t.Fatalf("Invalid 2.1 TestDeleteSecret %d", expected)
+		t.Fatalf("Invalid 2.1 TestDeleteSecret %d", RepositoryDeleteCalls)
 	}
 
 }
