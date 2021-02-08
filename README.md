@@ -1,7 +1,7 @@
 # Secret Receiver
 
 ![Go Test](https://github.com/betorvs/secretreceiver/workflows/Go%20Test/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/betorvs/secretreceiver/badge.svg?branch=add_labels_annotations)](https://coveralls.io/github/betorvs/secretreceiver?branch=add_labels_annotations)
+[![Coverage Status](https://coveralls.io/repos/github/betorvs/secretreceiver/badge.svg?branch=master)](https://coveralls.io/github/betorvs/secretreceiver?branch=master)
 
 This microservice was created to act as a CRUD for secret in Kubernetes. To be used to automated secret renew in Kubernetes.
 
