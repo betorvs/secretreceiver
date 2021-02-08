@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.1] - 2019-12-10
+## [1.1.0] - 2020-02-08
+### Changed
+- golang to 1.15
+### Added 
+- logger using zip
+- add labels to secret
+- add tests directory to mock repository and logger
+- add coverage
+
+## [1.0.0] - 2019-12-10
 ### Added
 - CRUD to manage secrets inside kubernetes using rest api.
 - ENCODING_REQUEST variable to accepted only encoded requests.

@@ -2,7 +2,6 @@ package kubeclient
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/betorvs/secretreceiver/appcontext"
@@ -24,7 +23,8 @@ func (repo Repository) CheckSecretK8S(name string, namespace string) (string, st
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secretList, err := secretClient.List(metav1.ListOptions{})
 	if err != nil {
-		fmt.Println("error")
+		logLocal := config.GetLogger()
+		logLocal.Error(err)
 		return "", "", err
 	}
 	var checksum string
@@ -41,12 +41,13 @@ func (repo Repository) CheckSecretK8S(name string, namespace string) (string, st
 }
 
 // CreateSecretK8S func
-func (repo Repository) CreateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
+func (repo Repository) CreateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
+			Labels:    labels,
 			Annotations: map[string]string{
 				"checksum": checksum,
 				"source":   "secretreceiver",
@@ -56,7 +57,8 @@ func (repo Repository) CreateSecretK8S(name string, checksum string, namespace s
 	}
 	result, err := secretClient.Create(secret)
 	if err != nil {
-		fmt.Println("error")
+		logLocal := config.GetLogger()
+		logLocal.Error(err)
 		return "", err
 	}
 
@@ -64,12 +66,13 @@ func (repo Repository) CreateSecretK8S(name string, checksum string, namespace s
 }
 
 // UpdateSecretK8S func
-func (repo Repository) UpdateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
+func (repo Repository) UpdateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
+			Labels:    labels,
 			Annotations: map[string]string{
 				"checksum": checksum,
 				"source":   "secretreceiver",
@@ -79,7 +82,8 @@ func (repo Repository) UpdateSecretK8S(name string, checksum string, namespace s
 	}
 	result, err := secretClient.Update(secret)
 	if err != nil {
-		fmt.Println("error")
+		logLocal := config.GetLogger()
+		logLocal.Error(err)
 		return "", err
 	}
 
@@ -100,13 +104,11 @@ func (repo Repository) DeleteSecretK8S(name string, namespace string) (string, e
 	return "Deleted", nil
 }
 
-func init() {
-	if config.GetEnv("TESTRUN", "false") == "true" {
-		return
-	}
+// repositoryLazyInit lazy funcion to init Repository
+func repositoryLazyInit() appcontext.Component {
 	var clientConfig *rest.Config
 	var err error
-	if config.GetEnv("LOCALTEST", "false") == "true" {
+	if config.Values.LocalTestRun {
 		home := os.Getenv("HOME")
 		kubeconfig := fmt.Sprintf("%s/%s", home, ".kube/config")
 		// use the current context in kubeconfig
@@ -127,9 +129,16 @@ func init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	appcontext.Current.Add(appcontext.Repository, Repository{Clientset: clientset})
-	if appcontext.Current.Count() != 0 {
-		log.Println("[INFO] Kubeclient Repository initiated")
+	return Repository{Clientset: clientset}
+}
+
+func init() {
+	if config.Values.TestRun {
+		return
 	}
+
+	appcontext.Current.Add(appcontext.Repository, repositoryLazyInit)
+	logLocal := config.GetLogger()
+	logLocal.Info("Kubeclient Repository initiated")
 
 }

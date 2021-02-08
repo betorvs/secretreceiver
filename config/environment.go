@@ -1,23 +1,44 @@
 package config
 
-import "os"
-
-var (
-	// Port to be listened by application
-	Port string
-	// EncodingRequest string
-	EncodingRequest string
+import (
+	"github.com/spf13/viper"
 )
 
-// GetEnv func return a default value if dont find a environment variable
-func GetEnv(key, defaultValue string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return defaultValue
+//Values stores the current configuration values
+var Values Config
+
+//Config contains the application's configuration values. Add here your own variables and bind it on init() function
+type Config struct {
+	//Port contains the port in which the application listens
+	Port string
+	//AppName for displaying in Monitoring
+	AppName string
+	//LogLevel - DEBUG or INFO or WARNING or ERROR or PANIC or FATAL
+	LogLevel string
+	//TestRun state if the current execution is a test execution
+	TestRun bool
+	// LocalTestRun state if the current execution is a test execution
+	LocalTestRun bool
+	//UsePrometheus to enable prometheus metrics endpoint
+	UsePrometheus bool
+	// EncodingRequest string used to authenticate requests
+	EncodingRequest string
 }
 
 func init() {
-	Port = GetEnv("PORT", "9090")
-	EncodingRequest = GetEnv("ENCODING_REQUEST", "disabled")
+	_ = viper.BindEnv("TestRun", "TESTRUN")
+	viper.SetDefault("TestRun", false)
+	_ = viper.BindEnv("LocalTestRun", "LOCALTESTRUN")
+	viper.SetDefault("LocalTestRun", false)
+	_ = viper.BindEnv("UsePrometheus", "USEPROMETHEUS")
+	viper.SetDefault("UsePrometheus", false)
+	_ = viper.BindEnv("Port", "PORT")
+	viper.SetDefault("Port", "8080")
+	_ = viper.BindEnv("AppName", "APP_NAME")
+	viper.SetDefault("AppName", ".")
+	_ = viper.BindEnv("LogLevel", "LOG_LEVEL")
+	viper.SetDefault("LogLevel", "INFO")
+	_ = viper.BindEnv("EncodingRequest", "ENCODING_REQUEST")
+	viper.SetDefault("EncodingRequest", "disabled")
+	_ = viper.Unmarshal(&Values)
 }

@@ -6,6 +6,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/betorvs/secretreceiver/appcontext"
+	"github.com/betorvs/secretreceiver/config"
+	"github.com/betorvs/secretreceiver/tests"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,6 +19,9 @@ var (
 
 func TestGetSecret(t *testing.T) {
 	// Setup
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
+	appcontext.Current.Add(appcontext.Logger, tests.InitMockLogger)
+	config.Values.EncodingRequest = "disabled"
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
@@ -26,12 +32,15 @@ func TestGetSecret(t *testing.T) {
 
 	// Assertions
 	if assert.NoError(t, CheckSecret(c)) {
-		assert.Equal(t, http.StatusForbidden, rec.Code)
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 	}
 }
 
-func TestPostSlackEvents(t *testing.T) {
+func TestPostSecrets(t *testing.T) {
 	// Setup
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
+	appcontext.Current.Add(appcontext.Logger, tests.InitMockLogger)
+	config.Values.EncodingRequest = "disabled"
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(secretJSON))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
@@ -41,12 +50,15 @@ func TestPostSlackEvents(t *testing.T) {
 
 	// Assertions
 	if assert.NoError(t, CreateSecret(c)) {
-		assert.Equal(t, http.StatusForbidden, rec.Code)
+		assert.Equal(t, http.StatusCreated, rec.Code)
 	}
 }
 
 func TestPutSlackEvents(t *testing.T) {
 	// Setup
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
+	appcontext.Current.Add(appcontext.Logger, tests.InitMockLogger)
+	config.Values.EncodingRequest = "disabled"
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(secretJSON))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
@@ -56,12 +68,15 @@ func TestPutSlackEvents(t *testing.T) {
 
 	// Assertions
 	if assert.NoError(t, UpdateSecret(c)) {
-		assert.Equal(t, http.StatusForbidden, rec.Code)
+		assert.Equal(t, http.StatusAccepted, rec.Code)
 	}
 }
 
 func TestDeleteSecret(t *testing.T) {
 	// Setup
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
+	appcontext.Current.Add(appcontext.Logger, tests.InitMockLogger)
+	config.Values.EncodingRequest = "disabled"
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodDelete, "/", nil)
 	rec := httptest.NewRecorder()
@@ -72,6 +87,6 @@ func TestDeleteSecret(t *testing.T) {
 
 	// Assertions
 	if assert.NoError(t, CheckSecret(c)) {
-		assert.Equal(t, http.StatusForbidden, rec.Code)
+		assert.Equal(t, http.StatusNoContent, rec.Code)
 	}
 }
