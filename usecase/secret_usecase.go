@@ -4,8 +4,8 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"log"
 
+	"github.com/betorvs/secretreceiver/config"
 	"github.com/betorvs/secretreceiver/domain"
 )
 
@@ -23,13 +23,13 @@ func CheckSecret(name string, namespace string) (string, error) {
 // CreateSecret func
 func CreateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.CreateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
+	return kube.CreateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data, secret.Labels)
 }
 
 // UpdateSecret func
 func UpdateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.UpdateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data)
+	return kube.UpdateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data, secret.Labels)
 }
 
 // DeleteSecret func
@@ -42,7 +42,8 @@ func DeleteSecret(name string, namespace string) (string, error) {
 func ValidateAuthorization(signing string, message string, mysigning string) bool {
 	mac := hmac.New(sha256.New, []byte(mysigning))
 	if _, err := mac.Write([]byte(message)); err != nil {
-		log.Printf("mac.Write(%v) failed\n", message)
+		logLocal := config.GetLogger()
+		logLocal.Infof("mac.Write(%v) failed\n", message)
 		return false
 	}
 	calculatedMAC := "v0=" + hex.EncodeToString(mac.Sum(nil))

@@ -7,15 +7,8 @@ import (
 
 	"github.com/betorvs/secretreceiver/appcontext"
 	"github.com/betorvs/secretreceiver/domain"
+	"github.com/betorvs/secretreceiver/tests"
 	"github.com/stretchr/testify/assert"
-)
-
-var (
-	RepositoryCheckCalls  int
-	RepositoryCreateCalls int
-	RepositoryUpdateCalls int
-	RepositoryDeleteCalls int
-	secretJSON            = `{"name": "foo", "namespace": "default", "checksum": "xxxxaaaaqqqq", "data": { "foo":"bar" }}`
 )
 
 func TestValidateBot(t *testing.T) {
@@ -33,81 +26,54 @@ func TestValidateBot(t *testing.T) {
 	}
 }
 
-type RepositoryMock struct {
-}
-
-func (repo RepositoryMock) CheckSecretK8S(name string, namespace string) (string, string, error) {
-	RepositoryCheckCalls++
-	return "", "", nil
-}
-
-func (repo RepositoryMock) CreateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
-	RepositoryCreateCalls++
-	return "", nil
-}
-
-func (repo RepositoryMock) UpdateSecretK8S(name string, checksum string, namespace string, data map[string]string) (string, error) {
-	RepositoryUpdateCalls++
-	return "", nil
-}
-
-func (repo RepositoryMock) DeleteSecretK8S(name string, namespace string) (string, error) {
-	RepositoryDeleteCalls++
-	return "", nil
-}
-
 func TestCheckSecret(t *testing.T) {
-	repo := RepositoryMock{}
-	appcontext.Current.Add(appcontext.Repository, repo)
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
 	_, err := CheckSecret("foo", "bar")
 	assert.NoError(t, err)
 	expected := 1
-	if RepositoryCheckCalls != expected {
-		t.Fatalf("Invalid 2.1 TestCheckSecret %d", RepositoryCheckCalls)
+	if tests.RepositoryCheckCalls != expected {
+		t.Fatalf("Invalid 2.1 TestCheckSecret %d", tests.RepositoryCheckCalls)
 	}
 
 }
 
 func TestCreateSecret(t *testing.T) {
-	repo := RepositoryMock{}
-	appcontext.Current.Add(appcontext.Repository, repo)
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
 	secret := new(domain.Secret)
-	bodymarshal, err := json.Marshal(&secretJSON)
+	bodymarshal, err := json.Marshal(&tests.SecretJSON)
 	assert.NoError(t, err)
 	_ = json.Unmarshal(bodymarshal, &secret)
 	_, err = CreateSecret(secret)
 	assert.NoError(t, err)
 	expected := 1
-	if RepositoryCreateCalls != expected {
-		t.Fatalf("Invalid 3.1 TestCreateSecret %d", RepositoryCreateCalls)
+	if tests.RepositoryCreateCalls != expected {
+		t.Fatalf("Invalid 3.1 TestCreateSecret %d", tests.RepositoryCreateCalls)
 	}
 
 }
 
 func TestUpdateSecret(t *testing.T) {
-	repo := RepositoryMock{}
-	appcontext.Current.Add(appcontext.Repository, repo)
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
 	secret := new(domain.Secret)
-	bodymarshal, err := json.Marshal(&secretJSON)
+	bodymarshal, err := json.Marshal(&tests.SecretJSON)
 	assert.NoError(t, err)
 	_ = json.Unmarshal(bodymarshal, &secret)
 	_, err = UpdateSecret(secret)
 	assert.NoError(t, err)
 	expected := 1
-	if RepositoryUpdateCalls != expected {
-		t.Fatalf("Invalid 4.1 TestUpdateSecret %d", RepositoryUpdateCalls)
+	if tests.RepositoryUpdateCalls != expected {
+		t.Fatalf("Invalid 4.1 TestUpdateSecret %d", tests.RepositoryUpdateCalls)
 	}
 
 }
 
 func TestDeleteSecret(t *testing.T) {
-	repo := RepositoryMock{}
-	appcontext.Current.Add(appcontext.Repository, repo)
+	appcontext.Current.Add(appcontext.Repository, tests.InitRepository)
 	_, err := DeleteSecret("foo", "bar")
 	assert.NoError(t, err)
 	expected := 1
-	if RepositoryDeleteCalls != expected {
-		t.Fatalf("Invalid 2.1 TestDeleteSecret %d", RepositoryDeleteCalls)
+	if tests.RepositoryDeleteCalls != expected {
+		t.Fatalf("Invalid 2.1 TestDeleteSecret %d", tests.RepositoryDeleteCalls)
 	}
 
 }

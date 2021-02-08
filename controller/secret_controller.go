@@ -14,8 +14,7 @@ import (
 // CheckSecret func receives a secret name and return it checksum if found
 func CheckSecret(c echo.Context) (err error) {
 	name := c.Param("name")
-	if config.EncodingRequest != "disabled" && !verifierAuthorization(c, name) {
-		fmt.Printf("here: %v, %s", verifierAuthorization(c, name), config.EncodingRequest)
+	if config.Values.EncodingRequest != "disabled" && !verifierAuthorization(c, name) {
 		err := errors.New("Not Authorized")
 		return c.JSON(http.StatusForbidden, err)
 	}
@@ -36,7 +35,7 @@ func CreateSecret(c echo.Context) (err error) {
 	if err = c.Bind(secret); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if config.EncodingRequest != "disabled" && !verifierAuthorization(c, secret.Name) {
+	if config.Values.EncodingRequest != "disabled" && !verifierAuthorization(c, secret.Name) {
 		err := errors.New("Not Authorized")
 		return c.JSON(http.StatusForbidden, err)
 	}
@@ -53,7 +52,7 @@ func UpdateSecret(c echo.Context) (err error) {
 	if err = c.Bind(secret); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if config.EncodingRequest != "disabled" && !verifierAuthorization(c, secret.Name) {
+	if config.Values.EncodingRequest != "disabled" && !verifierAuthorization(c, secret.Name) {
 		err := errors.New("Not Authorized")
 		return c.JSON(http.StatusForbidden, err)
 	}
@@ -68,7 +67,7 @@ func UpdateSecret(c echo.Context) (err error) {
 func DeleteSecret(c echo.Context) (err error) {
 	name := c.Param("name")
 	namespace := c.Param("namespace")
-	if config.EncodingRequest != "disabled" && !verifierAuthorization(c, name) {
+	if config.Values.EncodingRequest != "disabled" && !verifierAuthorization(c, name) {
 		err := errors.New("Not Authorized")
 		return c.JSON(http.StatusForbidden, err)
 	}
@@ -87,6 +86,6 @@ func verifierAuthorization(c echo.Context, secretName string) bool {
 	timestamp := c.Request().Header.Get("X-SECRET-Request-Timestamp")
 	signature := c.Request().Header.Get("X-SECRET-Signature")
 	basestring := fmt.Sprintf("v1:%s:%s", timestamp, secretName)
-	verifier := usecase.ValidateAuthorization(signature, basestring, config.EncodingRequest)
+	verifier := usecase.ValidateAuthorization(signature, basestring, config.Values.EncodingRequest)
 	return verifier
 }
