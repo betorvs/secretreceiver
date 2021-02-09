@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2020-02-08
+## [1.1.1] - 2020-02-09
 ### Changed
 - golang to 1.15
 ### Added 
@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add labels to secret
 - add tests directory to mock repository and logger
 - add coverage
+
+## [1.1.0] - Removed
 
 ## [1.0.0] - 2019-12-10
 ### Added
