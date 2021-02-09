@@ -1,4 +1,4 @@
-FROM golang:1.14.0-alpine3.11 AS golang
+FROM golang:1.15.0-alpine3.12 AS golang
 
 ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver/
 RUN apk add --no-cache git
@@ -8,7 +8,7 @@ COPY . $LOC
 ENV CGO_ENABLED 0
 RUN cd $LOC && TESTRUN=true go test ./... && go build
 
-FROM alpine:3.11
+FROM alpine:3.12
 ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver
 WORKDIR /
 VOLUME /tmp
@@ -18,10 +18,10 @@ RUN mkdir -p /app
 RUN addgroup -g 1000 -S app && \
     adduser -u 1000 -G app -S -D -h /app app && \
     chmod 755 /app
-COPY --from=golang $LOC/. /app
+COPY --from=golang $LOC/secretreceiver /app
 
 EXPOSE 8080
-RUN chmod +x /app/.
+RUN chmod +x /app/secretreceiver
 WORKDIR /app    
 USER app
-CMD ["/app/."]
+CMD ["/app/secretreceiver"]
