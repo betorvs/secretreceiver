@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.1] - 2020-02-09
+## [1.1.2] - 2021-02-18
+### Added
+- Add annotations in secret receiver
+
+## [1.1.1] - 2021-02-09
 ### Changed
 - golang to 1.15
 ### Added 

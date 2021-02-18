@@ -41,17 +41,15 @@ func (repo Repository) CheckSecretK8S(name string, namespace string) (string, st
 }
 
 // CreateSecretK8S func
-func (repo Repository) CreateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
+func (repo Repository) CreateSecretK8S(name, namespace string, data, labels, annotations map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
+
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: namespace,
-			Labels:    labels,
-			Annotations: map[string]string{
-				"checksum": checksum,
-				"source":   "secretreceiver",
-			},
+			Name:        name,
+			Namespace:   namespace,
+			Labels:      labels,
+			Annotations: annotations,
 		},
 		StringData: data,
 	}
@@ -66,17 +64,14 @@ func (repo Repository) CreateSecretK8S(name string, checksum string, namespace s
 }
 
 // UpdateSecretK8S func
-func (repo Repository) UpdateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
+func (repo Repository) UpdateSecretK8S(name, namespace string, data, labels, annotations map[string]string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: namespace,
-			Labels:    labels,
-			Annotations: map[string]string{
-				"checksum": checksum,
-				"source":   "secretreceiver",
-			},
+			Name:        name,
+			Namespace:   namespace,
+			Labels:      labels,
+			Annotations: annotations,
 		},
 		StringData: data,
 	}

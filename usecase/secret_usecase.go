@@ -23,13 +23,25 @@ func CheckSecret(name string, namespace string) (string, error) {
 // CreateSecret func
 func CreateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.CreateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data, secret.Labels)
+	annotations := make(map[string]string)
+	if secret.Annotations != nil {
+		annotations = secret.Annotations
+	}
+	annotations["checksum"] = secret.Checksum
+	annotations["source"] = "secretreceiver"
+	return kube.CreateSecretK8S(secret.Name, secret.Namespace, secret.Data, secret.Labels, annotations)
 }
 
 // UpdateSecret func
 func UpdateSecret(secret *domain.Secret) (string, error) {
 	kube := domain.GetRepository()
-	return kube.UpdateSecretK8S(secret.Name, secret.Checksum, secret.Namespace, secret.Data, secret.Labels)
+	annotations := make(map[string]string)
+	if secret.Annotations != nil {
+		annotations = secret.Annotations
+	}
+	annotations["checksum"] = secret.Checksum
+	annotations["source"] = "secretreceiver"
+	return kube.UpdateSecretK8S(secret.Name, secret.Namespace, secret.Data, secret.Labels, annotations)
 }
 
 // DeleteSecret func

@@ -28,13 +28,13 @@ func (repo RepositoryMock) CheckSecretK8S(name string, namespace string) (string
 }
 
 // CreateSecretK8S mock func
-func (repo RepositoryMock) CreateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
+func (repo RepositoryMock) CreateSecretK8S(name, namespace string, data, labels, annotations map[string]string) (string, error) {
 	RepositoryCreateCalls++
 	return "", nil
 }
 
 // UpdateSecretK8S mock func
-func (repo RepositoryMock) UpdateSecretK8S(name string, checksum string, namespace string, data, labels map[string]string) (string, error) {
+func (repo RepositoryMock) UpdateSecretK8S(name, namespace string, data, labels, annotations map[string]string) (string, error) {
 	RepositoryUpdateCalls++
 	return "", nil
 }
