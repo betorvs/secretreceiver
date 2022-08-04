@@ -1,6 +1,7 @@
 package kubeclient
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -16,12 +17,13 @@ import (
 // Repository struct
 type Repository struct {
 	Clientset *kubernetes.Clientset
+	ctx       context.Context
 }
 
 // CheckSecretK8S func
 func (repo Repository) CheckSecretK8S(name string, namespace string) (string, string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
-	secretList, err := secretClient.List(metav1.ListOptions{})
+	secretList, err := secretClient.List(repo.ctx, metav1.ListOptions{})
 	if err != nil {
 		logLocal := config.GetLogger()
 		logLocal.Error(err)
@@ -53,7 +55,8 @@ func (repo Repository) CreateSecretK8S(name, namespace string, data, labels, ann
 		},
 		StringData: data,
 	}
-	result, err := secretClient.Create(secret)
+	options := metav1.CreateOptions{}
+	result, err := secretClient.Create(repo.ctx, secret, options)
 	if err != nil {
 		logLocal := config.GetLogger()
 		logLocal.Error(err)
@@ -75,7 +78,8 @@ func (repo Repository) UpdateSecretK8S(name, namespace string, data, labels, ann
 		},
 		StringData: data,
 	}
-	result, err := secretClient.Update(secret)
+	options := metav1.UpdateOptions{}
+	result, err := secretClient.Update(repo.ctx, secret, options)
 	if err != nil {
 		logLocal := config.GetLogger()
 		logLocal.Error(err)
@@ -89,10 +93,10 @@ func (repo Repository) UpdateSecretK8S(name, namespace string, data, labels, ann
 func (repo Repository) DeleteSecretK8S(name string, namespace string) (string, error) {
 	secretClient := repo.Clientset.CoreV1().Secrets(namespace)
 	deletePolicy := metav1.DeletePropagationForeground
-	options := &metav1.DeleteOptions{
+	options := metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	}
-	err := secretClient.Delete(name, options)
+	err := secretClient.Delete(repo.ctx, name, options)
 	if err != nil {
 		return "", err
 	}
@@ -101,6 +105,7 @@ func (repo Repository) DeleteSecretK8S(name string, namespace string) (string, e
 
 // repositoryLazyInit lazy funcion to init Repository
 func repositoryLazyInit() appcontext.Component {
+	ctx := context.Background()
 	var clientConfig *rest.Config
 	var err error
 	if config.Values.LocalTestRun {
@@ -124,7 +129,7 @@ func repositoryLazyInit() appcontext.Component {
 	if err != nil {
 		panic(err.Error())
 	}
-	return Repository{Clientset: clientset}
+	return Repository{Clientset: clientset, ctx: ctx}
 }
 
 func init() {
