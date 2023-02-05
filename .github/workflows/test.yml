@@ -15,4 +15,8 @@ jobs:
         go-version: '>=1.19.0'
       id: go
     - name: Test
-      run: TESTRUN=true go test -v ./...
+      run: TESTRUN=true go test -v ./... -covermode=count -coverprofile=coverage.out
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
