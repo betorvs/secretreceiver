@@ -1,4 +1,4 @@
-FROM golang:1.15.0-alpine3.12 AS golang
+FROM golang:1.19.5-alpine3.17 AS golang
 
 ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver/
 RUN apk add --no-cache git
@@ -8,7 +8,7 @@ COPY . $LOC
 ENV CGO_ENABLED 0
 RUN cd $LOC && TESTRUN=true go test ./... && go build
 
-FROM alpine:3.12
+FROM alpine:3.17
 ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver
 WORKDIR /
 VOLUME /tmp
