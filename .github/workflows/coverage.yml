@@ -17,9 +17,9 @@ jobs:
       - name: Calc coverage
         run: TESTRUN=true go test -v ./... -covermode=count -coverprofile=coverage.out
       - name: gcov2lcov-action
-        uses: jandelgado/gcov2lcov-action@v1.0.8
+        uses: jandelgado/gcov2lcov-action@v1
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: coverage.lcov
