@@ -4,7 +4,8 @@ ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver/
 RUN apk add --no-cache git
 RUN mkdir -p $LOC
 ENV GOPATH /go
-COPY go* main.go appcontext config controller domain gateway tests usecase utils $LOC
+# Sensitive
+COPY . $LOC
 ENV CGO_ENABLED 0
 RUN cd $LOC && TESTRUN=true go test ./... && go build
 
