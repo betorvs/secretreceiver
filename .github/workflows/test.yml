@@ -16,6 +16,10 @@ jobs:
       id: go
     - name: Test
       run: TESTRUN=true go test -v ./... -covermode=count -coverprofile=coverage.out
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        args: --timeout=10m
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
