@@ -1,11 +1,18 @@
 FROM golang:1.19.5-alpine3.17 AS golang
 
-ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver/
+ARG LOC=/builds/go/src/github.com/betorvs/secretreceiver
 RUN apk add --no-cache git
 RUN mkdir -p $LOC
 ENV GOPATH /go
-# Sensitive
-COPY . $LOC
+COPY main.go go.mod go.sum $LOC/
+COPY ./appcontext $LOC/appcontext
+COPY ./config $LOC/config
+COPY ./controller $LOC/controller
+COPY ./domain $LOC/domain
+COPY ./gateway $LOC/gateway
+COPY ./tests $LOC/tests
+COPY ./usecase $LOC/usecase
+COPY ./utils $LOC/utils
 ENV CGO_ENABLED 0
 RUN cd $LOC && TESTRUN=true go test ./... && go build
 
