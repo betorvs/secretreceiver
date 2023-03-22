@@ -4,6 +4,10 @@ metadata:
   name: secretreceiver
   annotations:
     github.com/project-slug: betorvs/secretreceiver
+  links:
+    - url: https://github.com/betorvs/secretpublisher
+      title: Secret Publisher
+      icon: dashboard
 spec:
   type: service
   lifecycle: experimental
