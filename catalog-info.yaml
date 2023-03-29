@@ -13,3 +13,15 @@ spec:
   lifecycle: experimental
   owner: guests
   system: examples
+  dependsOn:
+    - 'resource:kubernetes'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: kubernetes
+  description: kubernetes to save secrets
+spec:
+  type: infrastructure
+  owner: guests
+  system: examples
